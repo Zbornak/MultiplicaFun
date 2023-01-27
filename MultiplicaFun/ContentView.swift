@@ -20,7 +20,6 @@ struct ContentView: View {
     @State private var buttonAnimationAmount = 1.0
     @State private var textSlideAnimationAmount = 1.0
     
-    @State private var isMessageShowing = false
     @State private var isQuestionShowing = false
     
     var numberOfQuestions = [5, 10, 20]
@@ -33,24 +32,19 @@ struct ContentView: View {
                     .ignoresSafeArea()
                 
                 VStack {
-                    Section {
-                        HStack {
-                            TextField("Enter your name!", text: $userName)
-                                .textFieldStyle(.roundedBorder)
-                                .padding()
-                        }
-                    }
+                    TextField("Enter your name!", text: $userName)
+                        .textFieldStyle(.roundedBorder)
+                        .padding()
                     
                     HStack {
                         Text("🐮")
                             .font(.system(size: 90))
                             .rotationEffect(.degrees(cowculatorRotationAmount))
                             .animation(Animation.easeInOut(duration: 1.5).repeatForever(autoreverses: true), value: cowculatorRotationAmount)
-                            .onAppear {
-                                cowculatorRotationAmount = 30.0
-                            }
+                            .onAppear { cowculatorRotationAmount = 30.0 }
                         
-                        Text(isMessageShowing ? "Hi \(userName)! I'm your cowculator and I'm going to test your multiplication skills!" : "")
+                            //userName == "" ? "" :
+                        Text("Hi \(userName)! I'm your cowculator and I'm going to test your multiplication skills!")
                     }
                     .padding()
                     
@@ -78,9 +72,11 @@ struct ContentView: View {
                     }
                     .padding()
                     
-                    Button("Go!") {
+                    Button("GO!") {
                             isQuestionShowing = true
                     }
+                    .fontWeight(.bold)
+                    .font(.title)
                     .padding()
                     .buttonStyle(.bordered)
                     .background(.red)
@@ -97,26 +93,25 @@ struct ContentView: View {
                         buttonAnimationAmount = 2.0
                     }
                     
-                    VStack {
-                        Text(isQuestionShowing ? "What is \(multiplicand) ✖️ \(multiplier) ⁉️" : "")
-                            .font(.largeTitle)
-                            .scaleEffect(questionAnimationAmount)
-                            .animation(Animation.easeInOut(duration: 1).repeatForever(autoreverses: true), value: questionAnimationAmount)
-                            .onAppear {
-                                questionAnimationAmount = 1.0
-                            }
-                        HStack {
-                            Text("Answer:")
-                            TextField("enter answer", value: $userAnswer, format: .number)
-                                .textFieldStyle(.roundedBorder)
+                    Text(isQuestionShowing ? "What is \(multiplicand) ✖️ \(multiplier) ⁉️" : "")
+                        .font(.largeTitle)
+                        .scaleEffect(questionAnimationAmount)
+                        .animation(Animation.easeInOut(duration: 1).repeatForever(autoreverses: true), value: questionAnimationAmount)
+                        .onAppear {
+                            questionAnimationAmount = 1.0
                         }
-                        .padding()
+                    HStack {
+                        Text("Answer:")
+                        TextField("enter answer", value: $userAnswer, format: .number)
+                            .textFieldStyle(.roundedBorder)
+                            .keyboardType(.numberPad)
+                    }
+                    .padding()
                         
-                        HStack {
-                            Spacer()
-                            Text("Score: \(userScore)")
-                            Spacer()
-                        }
+                    HStack {
+                        Spacer()
+                        Text("Score: \(userScore)")
+                        Spacer()
                     }
                 }
                 .fontWeight(.bold)
