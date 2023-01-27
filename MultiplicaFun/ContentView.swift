@@ -16,7 +16,7 @@ struct ContentView: View {
     @State private var userScore = 0
     
     @State private var questionAnimationAmount = 0.8
-    @State private var cowculatorAnimationAmount = 0.9
+    @State private var cowculatorRotationAmount = 0.9
     @State private var buttonAnimationAmount = 1.0
     @State private var textSlideAnimationAmount = 1.0
     
@@ -30,6 +30,10 @@ struct ContentView: View {
                     .ignoresSafeArea()
                 
                 VStack {
+                    Spacer()
+                    Spacer()
+                    Spacer()
+                    
                     Section {
                         HStack {
                             TextField("enter name", text: $userName)
@@ -50,11 +54,11 @@ struct ContentView: View {
                     
                     HStack {
                         Text("🐮")
-                            .font(.system(size: 100))
-                            .scaleEffect(cowculatorAnimationAmount)
-                            .animation(Animation.easeInOut(duration: 0.3).repeatForever(autoreverses: true), value: cowculatorAnimationAmount)
+                            .font(.system(size: 150))
+                            .rotationEffect(.degrees(cowculatorRotationAmount))
+                            .animation(Animation.easeInOut(duration: 1.0).repeatForever(autoreverses: true), value: cowculatorRotationAmount)
                             .onAppear {
-                                cowculatorAnimationAmount = 1.0
+                                cowculatorRotationAmount = 30.0
                             }
                         
                         Text(isMessageShowing ? "Hi \(userName)! I'm your cowculator and I'm going to test your multiplication skills!" : "")
@@ -80,6 +84,7 @@ struct ContentView: View {
                     }
                     
                     VStack {
+                        Spacer()
                         Text(isQuestionShowing ? "What is..." : "")
                             .padding(5)
                         Text(isQuestionShowing ? "\(multiplicand) ✖️ \(multiplier) ⁉️" : "")
@@ -111,13 +116,15 @@ struct ContentView: View {
                             .onAppear {
                                 buttonAnimationAmount = 2.0
                             }
-                            .padding()
+                        }
+                        .padding()
+                        
+                        HStack {
+                            Spacer()
+                            Text("Score: \(userScore)")
+                            Spacer()
                         }
                     }
-                    .padding()
-                    .border(.black, width: 3)
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                    .padding()
                 }
                 .fontWeight(.bold)
                 .navigationTitle("🌈 MultiplicaFun!")
