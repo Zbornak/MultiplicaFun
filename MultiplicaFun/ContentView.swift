@@ -13,9 +13,15 @@ struct ContentView: View {
     @State private var userPracticeChoice = 2
     @State private var userAnswer = 0
     @State private var userName = ""
+    @State private var userScore = 0
+    
     @State private var questionAnimationAmount = 0.8
     @State private var cowculatorAnimationAmount = 0.9
     @State private var buttonAnimationAmount = 1.0
+    @State private var textSlideAnimationAmount = 1.0
+    
+    @State private var isMessageShowing = false
+    @State private var isQuestionShowing = false
     
     var body: some View {
         NavigationView {
@@ -24,12 +30,24 @@ struct ContentView: View {
                     .ignoresSafeArea()
                 
                 VStack {
-                    HStack {
-                        Text("What is your name?")
-                        TextField("enter name", text: $userName)
-                            .textFieldStyle(.roundedBorder)
+                    Section {
+                        HStack {
+                            TextField("enter name", text: $userName)
+                                .textFieldStyle(.roundedBorder)
+                                .padding()
+                            Button("ok") {
+                                isMessageShowing = true
+                            }
+                            .padding(2)
+                            .buttonStyle(.bordered)
+                            .background(.red)
+                            .foregroundColor(.white)
+                            .clipShape(Circle())
+                        }
+                    } header: {
+                         Text("What's your name?")
                     }
-                    .padding()
+                    
                     HStack {
                         Text("🐮")
                             .font(.system(size: 100))
@@ -38,19 +56,33 @@ struct ContentView: View {
                             .onAppear {
                                 cowculatorAnimationAmount = 1.0
                             }
-                        Text(userName == "" ? "" : "Hi \(userName)! I'm your cowculator and I'm going to test your skills!")
-                    }
-                    
-                    HStack {
-                        Stepper("What do you want to practice?", value: $userPracticeChoice, in: 2...12)
-                        Text("\(userPracticeChoice) times table")
+                        
+                        Text(isMessageShowing ? "Hi \(userName)! I'm your cowculator and I'm going to test your multiplication skills!" : "")
                     }
                     .padding()
                     
+                    Section {
+                        HStack {
+                            Stepper("What table do you want to practice?", value: $userPracticeChoice, in: 2...12)
+                                .labelsHidden()
+                            Text("\(userPracticeChoice) times table")
+                            Button("ok") {
+                                isQuestionShowing = true
+                            }
+                            .padding(2)
+                            .buttonStyle(.bordered)
+                            .background(.red)
+                            .foregroundColor(.white)
+                            .clipShape(Circle())
+                        }
+                    } header: {
+                        Text("What table do you want to practice?")
+                    }
+                    
                     VStack {
-                        Text("What is...")
+                        Text(isQuestionShowing ? "What is..." : "")
                             .padding(5)
-                        Text("\(multiplicand) ✖️ \(multiplier) ⁉️")
+                        Text(isQuestionShowing ? "\(multiplicand) ✖️ \(multiplier) ⁉️" : "")
                             .font(.largeTitle)
                             .scaleEffect(questionAnimationAmount)
                             .animation(Animation.easeInOut(duration: 1).repeatForever(autoreverses: true), value: questionAnimationAmount)
