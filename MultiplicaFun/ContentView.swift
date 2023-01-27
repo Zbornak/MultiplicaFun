@@ -23,6 +23,9 @@ struct ContentView: View {
     @State private var isMessageShowing = false
     @State private var isQuestionShowing = false
     
+    var numberOfQuestions = [5, 10, 20]
+    @State private var selectedNumber = 5
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -30,33 +33,19 @@ struct ContentView: View {
                     .ignoresSafeArea()
                 
                 VStack {
-                    Spacer()
-                    Spacer()
-                    Spacer()
-                    
                     Section {
                         HStack {
-                            TextField("enter name", text: $userName)
+                            TextField("Enter your name!", text: $userName)
                                 .textFieldStyle(.roundedBorder)
                                 .padding()
-                            Button("ok") {
-                                isMessageShowing = true
-                            }
-                            .padding(2)
-                            .buttonStyle(.bordered)
-                            .background(.red)
-                            .foregroundColor(.white)
-                            .clipShape(Circle())
                         }
-                    } header: {
-                         Text("What's your name?")
                     }
                     
                     HStack {
                         Text("🐮")
-                            .font(.system(size: 150))
+                            .font(.system(size: 90))
                             .rotationEffect(.degrees(cowculatorRotationAmount))
-                            .animation(Animation.easeInOut(duration: 1.0).repeatForever(autoreverses: true), value: cowculatorRotationAmount)
+                            .animation(Animation.easeInOut(duration: 1.5).repeatForever(autoreverses: true), value: cowculatorRotationAmount)
                             .onAppear {
                                 cowculatorRotationAmount = 30.0
                             }
@@ -70,24 +59,46 @@ struct ContentView: View {
                             Stepper("What table do you want to practice?", value: $userPracticeChoice, in: 2...12)
                                 .labelsHidden()
                             Text("\(userPracticeChoice) times table")
-                            Button("ok") {
-                                isQuestionShowing = true
-                            }
-                            .padding(2)
-                            .buttonStyle(.bordered)
-                            .background(.red)
-                            .foregroundColor(.white)
-                            .clipShape(Circle())
                         }
                     } header: {
                         Text("What table do you want to practice?")
                     }
                     
+                    Section {
+                        HStack {
+                            Picker("How many questions do you want?", selection: $selectedNumber) {
+                                ForEach(numberOfQuestions, id: \.self) {
+                                    Text("\($0)")
+                                }
+                            }
+                            .pickerStyle(.segmented)
+                        }
+                    } header: {
+                        Text("How many questions do you want?")
+                    }
+                    .padding()
+                    
+                    Button("Go!") {
+                            isQuestionShowing = true
+                    }
+                    .padding()
+                    .buttonStyle(.bordered)
+                    .background(.red)
+                    .foregroundColor(.white)
+                    .clipShape(Circle())
+                    .overlay(
+                        Circle()
+                            .stroke(.red)
+                            .scaleEffect(buttonAnimationAmount)
+                            .opacity(2 - buttonAnimationAmount)
+                            .animation(Animation.easeInOut(duration: 1.0).repeatForever(autoreverses: false), value: buttonAnimationAmount)
+                        )
+                    .onAppear {
+                        buttonAnimationAmount = 2.0
+                    }
+                    
                     VStack {
-                        Spacer()
-                        Text(isQuestionShowing ? "What is..." : "")
-                            .padding(5)
-                        Text(isQuestionShowing ? "\(multiplicand) ✖️ \(multiplier) ⁉️" : "")
+                        Text(isQuestionShowing ? "What is \(multiplicand) ✖️ \(multiplier) ⁉️" : "")
                             .font(.largeTitle)
                             .scaleEffect(questionAnimationAmount)
                             .animation(Animation.easeInOut(duration: 1).repeatForever(autoreverses: true), value: questionAnimationAmount)
@@ -98,24 +109,6 @@ struct ContentView: View {
                             Text("Answer:")
                             TextField("enter answer", value: $userAnswer, format: .number)
                                 .textFieldStyle(.roundedBorder)
-                            Button("Go!") {
-                                
-                            }
-                            .padding(10)
-                            .buttonStyle(.bordered)
-                            .background(.red)
-                            .foregroundColor(.white)
-                            .clipShape(Circle())
-                            .overlay(
-                                Circle()
-                                    .stroke(.red)
-                                    .scaleEffect(buttonAnimationAmount)
-                                    .opacity(2 - buttonAnimationAmount)
-                                    .animation(Animation.easeInOut(duration: 1.0).repeatForever(autoreverses: false), value: buttonAnimationAmount)
-                            )
-                            .onAppear {
-                                buttonAnimationAmount = 2.0
-                            }
                         }
                         .padding()
                         
