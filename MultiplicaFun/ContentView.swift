@@ -23,6 +23,7 @@ struct ContentView: View {
     
     @State private var userName = ""
     @State private var userScore = 0
+    @State private var isUserCorrect = false
     
     //how many questions user wants
     @State private var selectedNumber = 5
@@ -46,17 +47,6 @@ struct ContentView: View {
         } else {
             isEndGameAlertShowing = true
             questionCount = 0
-        }
-    }
-    
-    func isUserCorrect() -> Bool {
-        if userAnswer == correctAnswer {
-            userScore += 1
-            isScoreUpdateShowing = true
-            return true
-        } else {
-            isScoreUpdateShowing = true
-            return false
         }
     }
     
@@ -153,13 +143,28 @@ struct ContentView: View {
                 }
                 .fontWeight(.bold)
                 .navigationTitle("🌈 MultiplicaFun!")
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Button("OK") {
+                            if userAnswer == correctAnswer {
+                                userScore += 1
+                                isUserCorrect = true
+                                isScoreUpdateShowing = true
+                            } else {
+                                isUserCorrect = false
+                                isScoreUpdateShowing = true
+                            }
+                            endGame()
+                        }
+                    }
+                }
             }
         }
         .alert("Game Over!", isPresented: $isEndGameAlertShowing) {} message: {
             Text("🐮 You got \(userScore) of \(selectedNumber) questions correct!")
         }
         .alert("Score", isPresented: $isScoreUpdateShowing) {} message: {
-            Text(isUserCorrect() ? "🐮 Correct! \(multiplicand) x \(multiplier) = \(correctAnswer)" : "🐮 Wrong! \(multiplicand) x \(multiplier) = \(correctAnswer)")
+            Text(isUserCorrect ? "🐮 Correct! \(multiplicand) x \(multiplier) = \(correctAnswer)" : "🐮 Wrong! \(multiplicand) x \(multiplier) = \(correctAnswer)")
         }
     }
 }
