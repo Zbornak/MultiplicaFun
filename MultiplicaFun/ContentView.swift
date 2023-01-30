@@ -18,16 +18,7 @@ struct ContentView: View {
     
     //calculate the correct answer
     private var correctAnswer: Int {
-        return 0
-    }
-    
-    private var isUserCorrect: Bool {
-        if userAnswer == correctAnswer {
-            userScore += 1
-            return true
-        } else {
-            return false
-        }
+        return multiplicand * multiplier
     }
     
     @State private var userName = ""
@@ -100,7 +91,6 @@ struct ContentView: View {
                     Button("GO!") {
                             isQuestionShowing = true
                             multiplier = userPracticeChoice
-                            isScoreUpdateShowing = true
                     }
                     .fontWeight(.bold)
                     .font(.title3)
@@ -146,10 +136,10 @@ struct ContentView: View {
             }
         }
         .alert("Game Over!", isPresented: $isEndGameAlertShowing) {} message: {
-            Text("You got \(userScore) of \(selectedNumber) questions correct!")
+            Text("🐮 You got \(userScore) of \(selectedNumber) questions correct!")
         }
         .alert("Score", isPresented: $isScoreUpdateShowing) {} message: {
-            Text(isUserCorrect ? "Correct!😻 \(multiplicand) x \(multiplier) = \(correctAnswer)" : "Wrong!🙀 \(multiplicand) x \(multiplier) = \(correctAnswer)")
+            Text(isUserCorrect() ? "🐮 Correct! \(multiplicand) x \(multiplier) = \(correctAnswer)" : "🐮 Wrong! \(multiplicand) x \(multiplier) = \(correctAnswer)")
         }
     }
     
@@ -159,6 +149,17 @@ struct ContentView: View {
         } else {
             isEndGameAlertShowing = true
             questionCount = 0
+        }
+    }
+    
+    func isUserCorrect() -> Bool {
+        if userAnswer == correctAnswer {
+            userScore += 1
+            isScoreUpdateShowing = true
+            return true
+        } else {
+            isScoreUpdateShowing = true
+            return false
         }
     }
 }
