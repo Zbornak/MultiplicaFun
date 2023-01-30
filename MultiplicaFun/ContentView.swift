@@ -134,24 +134,26 @@ struct ContentView: View {
                                 isScoreUpdateShowing = true
                                 questionCount += 1
                                 multiplicand = Int.random(in: 1...10)
-                                isQuestionShowing = false
                                 
                                 if questionCount == selectedNumber {
                                     isScoreUpdateShowing = true
                                     isEndGameAlertShowing = true
                                     buttonHidden = false
+                                    isQuestionShowing = false
+                                    questionCount = 0
                                 }
                             } else {
                                 isUserCorrect = false
                                 isScoreUpdateShowing = true
                                 questionCount += 1
                                 multiplicand = Int.random(in: 1...10)
-                                isQuestionShowing = false
                                 
                                 if questionCount == selectedNumber {
                                     isScoreUpdateShowing = true
                                     isEndGameAlertShowing = true
                                     buttonHidden = false
+                                    isQuestionShowing = false
+                                    questionCount = 0
                                 }
                             }
                         }
@@ -162,6 +164,7 @@ struct ContentView: View {
                     HStack {
                         Spacer()
                         Text("Score: \(userScore)")
+                        Text("Question: \(questionCount)")
                         Spacer()
                     }
                 }
@@ -171,10 +174,10 @@ struct ContentView: View {
             }
         }
         .alert("Game Over!", isPresented: $isEndGameAlertShowing) {} message: {
-            Text("🐮 Great work, you scored \(userScore) out of \(selectedNumber)!")
+            Text("🐮 You scored \(userScore) out of \(selectedNumber)!")
         }
         .alert("Score", isPresented: $isScoreUpdateShowing) {} message: {
-            Text(isUserCorrect ? "🐮 Correct! \(multiplicand) x \(multiplier) = \(correctAnswer)" : "🐮 Wrong! \(multiplicand) x \(multiplier) = \(correctAnswer)")
+            Text(isUserCorrect ? "🐮 Correct!" : "🐮 Wrong!")
         }
     }
 }
