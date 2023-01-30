@@ -8,22 +8,37 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var multiplicand = 0
+    //logic
+    @State private var multiplicand = Int.random(in: 1...10)
     @State private var multiplier = 0
     @State private var userPracticeChoice = 2
     @State private var userAnswer = 0
     @State private var userName = ""
     @State private var userScore = 0
+    @State private var selectedNumber = 5
+    @State private var questionCount = 0
     
+    var numberOfQuestions = [5, 10, 20]
+    
+    //animations
     @State private var questionAnimationAmount = 0.8
     @State private var cowculatorRotationAmount = 0.9
     @State private var buttonAnimationAmount = 1.0
     @State private var textSlideAnimationAmount = 1.0
     
+    //alert messages
     @State private var isQuestionShowing = false
-    
-    var numberOfQuestions = [5, 10, 20]
-    @State private var selectedNumber = 5
+    @State private var isScoreUpdateShowing = false
+    @State private var isEndGameAlertShowing = false
+        
+    func endGame() {
+        if questionCount < selectedNumber {
+            //continue game
+        } else {
+            isEndGameAlertShowing = true
+            questionCount = 0
+        }
+    }
     
     var body: some View {
         NavigationView {
@@ -38,13 +53,13 @@ struct ContentView: View {
                     
                     HStack {
                         Text("🐮")
-                            .font(.system(size: 90))
+                            .font(.system(size: 70))
                             .rotationEffect(.degrees(cowculatorRotationAmount))
                             .animation(Animation.easeInOut(duration: 1.5).repeatForever(autoreverses: true), value: cowculatorRotationAmount)
                             .onAppear { cowculatorRotationAmount = 30.0 }
                         
-                            //userName == "" ? "" :
-                        Text("Hi \(userName)! I'm your cowculator and I'm going to test your multiplication skills!")
+                        Text(userName == "" ? "" : "Hi \(userName)! I'm your cowculator and I'm going to test your multiplication skills!")
+                            .padding()
                     }
                     .padding()
                     
@@ -57,6 +72,7 @@ struct ContentView: View {
                     } header: {
                         Text("What table do you want to practice?")
                     }
+                    .padding()
                     
                     Section {
                         HStack {
@@ -74,9 +90,10 @@ struct ContentView: View {
                     
                     Button("GO!") {
                             isQuestionShowing = true
+                            multiplier = userPracticeChoice
                     }
                     .fontWeight(.bold)
-                    .font(.title)
+                    .font(.title3)
                     .padding()
                     .buttonStyle(.bordered)
                     .background(.red)
@@ -117,6 +134,12 @@ struct ContentView: View {
                 .fontWeight(.bold)
                 .navigationTitle("🌈 MultiplicaFun!")
             }
+        }
+        .alert("Game Over!", isPresented: $isEndGameAlertShowing) {} message: {
+            Text("You got \(userScore) of \(selectedNumber) questions correct!")
+        }
+        .alert("Score", isPresented: $isScoreUpdateShowing) {} message: {
+            Text("")
         }
     }
 }
