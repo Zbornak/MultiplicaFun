@@ -133,6 +133,8 @@ struct ContentView: View {
                                 isUserCorrect = true
                                 isScoreUpdateShowing = true
                                 questionCount += 1
+                                multiplicand = Int.random(in: 1...10)
+                                isQuestionShowing = false
                                 
                                 if questionCount == selectedNumber {
                                     isScoreUpdateShowing = true
@@ -143,6 +145,8 @@ struct ContentView: View {
                                 isUserCorrect = false
                                 isScoreUpdateShowing = true
                                 questionCount += 1
+                                multiplicand = Int.random(in: 1...10)
+                                isQuestionShowing = false
                                 
                                 if questionCount == selectedNumber {
                                     isScoreUpdateShowing = true
@@ -167,7 +171,7 @@ struct ContentView: View {
             }
         }
         .alert("Game Over!", isPresented: $isEndGameAlertShowing) {} message: {
-            Text("🐮 Great work, keep it up!")
+            Text("🐮 Great work, you scored \(userScore) out of \(selectedNumber)!")
         }
         .alert("Score", isPresented: $isScoreUpdateShowing) {} message: {
             Text(isUserCorrect ? "🐮 Correct! \(multiplicand) x \(multiplier) = \(correctAnswer)" : "🐮 Wrong! \(multiplicand) x \(multiplier) = \(correctAnswer)")
