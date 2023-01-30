@@ -8,16 +8,34 @@
 import SwiftUI
 
 struct ContentView: View {
-    //logic
     @State private var multiplicand = Int.random(in: 1...10)
     @State private var multiplier = 0
+    
+    //what timestable user wants to practice
     @State private var userPracticeChoice = 2
+    
     @State private var userAnswer = 0
+    
+    //calculate the correct answer
+    private var correctAnswer: Int {
+        return 0
+    }
+    
+    private var isUserCorrect: Bool {
+        if userAnswer == correctAnswer {
+            userScore += 1
+            return true
+        } else {
+            return false
+        }
+    }
+    
     @State private var userName = ""
     @State private var userScore = 0
+    
+    //how many questions user wants
     @State private var selectedNumber = 5
     @State private var questionCount = 0
-    
     var numberOfQuestions = [5, 10, 20]
     
     //animations
@@ -27,18 +45,9 @@ struct ContentView: View {
     @State private var textSlideAnimationAmount = 1.0
     
     //alert messages
-    @State private var isQuestionShowing = false
+    @State private var isQuestionShowing = false //this is to show the question on screen, not an alert
     @State private var isScoreUpdateShowing = false
     @State private var isEndGameAlertShowing = false
-        
-    func endGame() {
-        if questionCount < selectedNumber {
-            //continue game
-        } else {
-            isEndGameAlertShowing = true
-            questionCount = 0
-        }
-    }
     
     var body: some View {
         NavigationView {
@@ -67,7 +76,7 @@ struct ContentView: View {
                         HStack {
                             Stepper("What table do you want to practice?", value: $userPracticeChoice, in: 2...12)
                                 .labelsHidden()
-                            Text("\(userPracticeChoice) times table")
+                            Text("\(userPracticeChoice) timestable")
                         }
                     } header: {
                         Text("What table do you want to practice?")
@@ -91,6 +100,7 @@ struct ContentView: View {
                     Button("GO!") {
                             isQuestionShowing = true
                             multiplier = userPracticeChoice
+                            isScoreUpdateShowing = true
                     }
                     .fontWeight(.bold)
                     .font(.title3)
@@ -139,7 +149,16 @@ struct ContentView: View {
             Text("You got \(userScore) of \(selectedNumber) questions correct!")
         }
         .alert("Score", isPresented: $isScoreUpdateShowing) {} message: {
-            Text("")
+            Text(isUserCorrect ? "Correct!😻 \(multiplicand) x \(multiplier) = \(correctAnswer)" : "Wrong!🙀 \(multiplicand) x \(multiplier) = \(correctAnswer)")
+        }
+    }
+    
+    func endGame() {
+        if questionCount < selectedNumber {
+            //continue game
+        } else {
+            isEndGameAlertShowing = true
+            questionCount = 0
         }
     }
 }
