@@ -41,6 +41,8 @@ struct ContentView: View {
     @State private var isScoreUpdateShowing = false
     @State private var isEndGameAlertShowing = false
     
+    @State private var buttonHidden = false
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -92,6 +94,7 @@ struct ContentView: View {
                     Button("GO!") {
                             isQuestionShowing = true
                             multiplier = userPracticeChoice
+                            buttonHidden = true
                     }
                     .fontWeight(.bold)
                     .font(.title3)
@@ -110,6 +113,7 @@ struct ContentView: View {
                     .onAppear {
                         buttonAnimationAmount = 2.0
                     }
+                    .opacity(buttonHidden ? 0 : 1)
                     
                     Text(isQuestionShowing ? "What is \(multiplicand) ✖️ \(multiplier) ⁉️" : "")
                         .font(.largeTitle)
@@ -133,6 +137,7 @@ struct ContentView: View {
                                 if questionCount == selectedNumber {
                                     isScoreUpdateShowing = true
                                     isEndGameAlertShowing = true
+                                    buttonHidden = false
                                 }
                             } else {
                                 isUserCorrect = false
@@ -142,6 +147,7 @@ struct ContentView: View {
                                 if questionCount == selectedNumber {
                                     isScoreUpdateShowing = true
                                     isEndGameAlertShowing = true
+                                    buttonHidden = false
                                 }
                             }
                         }
