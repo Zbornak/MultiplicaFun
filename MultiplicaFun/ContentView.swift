@@ -123,6 +123,29 @@ struct ContentView: View {
                         TextField("enter answer", value: $userAnswer, format: .number)
                             .textFieldStyle(.roundedBorder)
                             .keyboardType(.numberPad)
+                        Button("OK") {
+                            if userAnswer == correctAnswer {
+                                userScore += 1
+                                isUserCorrect = true
+                                isScoreUpdateShowing = true
+                                questionCount += 1
+                                
+                                if questionCount == selectedNumber {
+                                    isScoreUpdateShowing = true
+                                    isEndGameAlertShowing = true
+                                }
+                            } else {
+                                isUserCorrect = false
+                                isScoreUpdateShowing = true
+                                questionCount += 1
+                                
+                                if questionCount == selectedNumber {
+                                    isScoreUpdateShowing = true
+                                    isEndGameAlertShowing = true
+                                }
+                            }
+                        }
+                        .foregroundColor(.black)
                     }
                     .padding()
                         
@@ -135,34 +158,10 @@ struct ContentView: View {
                 .fontWeight(.bold)
                 .navigationTitle("🌈 MultiplicaFun!")
                 .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItemGroup(placement: .keyboard) {
-                        Button("OK") {
-                            if userAnswer == correctAnswer {
-                                userScore += 1
-                                isUserCorrect = true
-                                isScoreUpdateShowing = true
-                                questionCount += 1
-                                
-                                if questionCount == selectedNumber {
-                                    isEndGameAlertShowing = true
-                                }
-                            } else {
-                                isUserCorrect = false
-                                isScoreUpdateShowing = true
-                                questionCount += 1
-                                
-                                if questionCount == selectedNumber {
-                                    isEndGameAlertShowing = true
-                                }
-                            }
-                        }
-                    }
-                }
             }
         }
         .alert("Game Over!", isPresented: $isEndGameAlertShowing) {} message: {
-            Text("🐮 You got \(userScore) of \(selectedNumber) questions correct!")
+            Text("🐮 Great work, keep it up!")
         }
         .alert("Score", isPresented: $isScoreUpdateShowing) {} message: {
             Text(isUserCorrect ? "🐮 Correct! \(multiplicand) x \(multiplier) = \(correctAnswer)" : "🐮 Wrong! \(multiplicand) x \(multiplier) = \(correctAnswer)")
