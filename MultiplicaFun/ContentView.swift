@@ -40,6 +40,26 @@ struct ContentView: View {
     @State private var isScoreUpdateShowing = false
     @State private var isEndGameAlertShowing = false
     
+    func endGame() {
+        if questionCount < selectedNumber {
+            //continue game
+        } else {
+            isEndGameAlertShowing = true
+            questionCount = 0
+        }
+    }
+    
+    func isUserCorrect() -> Bool {
+        if userAnswer == correctAnswer {
+            userScore += 1
+            isScoreUpdateShowing = true
+            return true
+        } else {
+            isScoreUpdateShowing = true
+            return false
+        }
+    }
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -140,26 +160,6 @@ struct ContentView: View {
         }
         .alert("Score", isPresented: $isScoreUpdateShowing) {} message: {
             Text(isUserCorrect() ? "🐮 Correct! \(multiplicand) x \(multiplier) = \(correctAnswer)" : "🐮 Wrong! \(multiplicand) x \(multiplier) = \(correctAnswer)")
-        }
-    }
-    
-    func endGame() {
-        if questionCount < selectedNumber {
-            //continue game
-        } else {
-            isEndGameAlertShowing = true
-            questionCount = 0
-        }
-    }
-    
-    func isUserCorrect() -> Bool {
-        if userAnswer == correctAnswer {
-            userScore += 1
-            isScoreUpdateShowing = true
-            return true
-        } else {
-            isScoreUpdateShowing = true
-            return false
         }
     }
 }
