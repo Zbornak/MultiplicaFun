@@ -95,6 +95,8 @@ struct ContentView: View {
                             isQuestionShowing = true
                             multiplier = userPracticeChoice
                             buttonHidden = true
+                            questionCount = 0
+                            userScore = 0
                     }
                     .fontWeight(.bold)
                     .font(.title3)
@@ -140,7 +142,6 @@ struct ContentView: View {
                                     isEndGameAlertShowing = true
                                     buttonHidden = false
                                     isQuestionShowing = false
-                                    questionCount = 0
                                 }
                             } else {
                                 isUserCorrect = false
@@ -153,7 +154,6 @@ struct ContentView: View {
                                     isEndGameAlertShowing = true
                                     buttonHidden = false
                                     isQuestionShowing = false
-                                    questionCount = 0
                                 }
                             }
                         }
