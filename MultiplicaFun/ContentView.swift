@@ -41,15 +41,6 @@ struct ContentView: View {
     @State private var isScoreUpdateShowing = false
     @State private var isEndGameAlertShowing = false
     
-    func endGame() {
-        if questionCount < selectedNumber {
-            //continue game
-        } else {
-            isEndGameAlertShowing = true
-            questionCount = 0
-        }
-    }
-    
     var body: some View {
         NavigationView {
             ZStack {
@@ -143,6 +134,7 @@ struct ContentView: View {
                 }
                 .fontWeight(.bold)
                 .navigationTitle("🌈 MultiplicaFun!")
+                .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItemGroup(placement: .keyboard) {
                         Button("OK") {
@@ -150,11 +142,20 @@ struct ContentView: View {
                                 userScore += 1
                                 isUserCorrect = true
                                 isScoreUpdateShowing = true
+                                questionCount += 1
+                                
+                                if questionCount == selectedNumber {
+                                    isEndGameAlertShowing = true
+                                }
                             } else {
                                 isUserCorrect = false
                                 isScoreUpdateShowing = true
+                                questionCount += 1
+                                
+                                if questionCount == selectedNumber {
+                                    isEndGameAlertShowing = true
+                                }
                             }
-                            endGame()
                         }
                     }
                 }
